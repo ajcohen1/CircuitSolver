@@ -1,5 +1,4 @@
-#ifndef MAIN_H
-#define MAIN_H
+#pragma once
 #include "CircuitBoard.h"
 #include "BoardComponent.h"
 #include "Node.h"
@@ -14,4 +13,3 @@ class Main
 
 };
 
-#endif

@@ -1,42 +1,35 @@
 #include "CircuitBoard.h"
 #include "BoardComponent.h"
 #include "Node.h"
-#include "BoardComponent.cpp"
 #include <string>
 #include <iostream>
 
-using namespace std;
 
-class CircuitBoard
-{
-public:
+	std::string testingVar = "";
 
-	string testingVar = "";
-
-	CircuitBoard(BoardComponent* firstComponent)
+	CircuitBoard::CircuitBoard(BoardComponent* firstComponent)
 	{
 		this->firstComponentPtr = firstComponent;
 
 	};
 
-	void printCircuit() {
-		cout << testingVar << endl;
+	void CircuitBoard::printCircuit() {
+		std::cout << testingVar << std::endl;
 	}
-private:
-	int count;
+
 	BoardComponent* firstComponentPtr;
 
-	void addElement(BoardComponent* newComponent)
+	void CircuitBoard::addElement(BoardComponent* newComponent)
 	{
 		firstComponentPtr->connections.push_front(newComponent);
 		testingVar += 'T';
 	}
 
 
-	void addNode() {
+	void CircuitBoard::addNode() {
 		BoardComponent* node = new Node(firstComponentPtr);
 		firstComponentPtr->connections.push_front(node);
 		firstComponentPtr = node;
 		testingVar += 'N';
 	}
-};
+

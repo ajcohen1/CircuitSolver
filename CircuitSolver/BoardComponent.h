@@ -1,6 +1,8 @@
-#ifndef BOARDCOMPONENT_H
-#define BOADCOMPONENT_H
+#pragma once
+
+#include <list>
 class BoardComponent
 {
+public:
+	std::list<BoardComponent*> connections;
 };
-#endif

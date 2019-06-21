@@ -1,6 +1,4 @@
-#ifndef BOARDCOMPONENT_H
-#define BOARDCOMPONENT_H
-
+#pragma once
 #include "BoardComponent.h"
 #include "potentialElements.h"
 
@@ -10,6 +8,9 @@ class ActiveComponent :
 {
 public:
 	ActiveComponent(BoardComponent* previousElement, potentialElements::allElements elementName, double magnitude, int multiplier);
-};
 
-#endif
+private:
+	double magnitude;
+	int multiplier;
+	potentialElements::allElements elementName;
+};
