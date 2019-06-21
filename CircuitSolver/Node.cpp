@@ -1,4 +1,5 @@
-#include "Wire.h"
+#include "Node.h"
+#include "BoardComponent.h"
 #include "BoardComponent.cpp"
 
 class Node: 

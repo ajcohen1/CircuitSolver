@@ -24,10 +24,13 @@
     <ClCompile Include="ActiveComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Wire.cpp">
+    <ClCompile Include="potentialElements.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="potentialElements.cpp">
+    <ClCompile Include="Node.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,10 +44,13 @@
     <ClInclude Include="ActiveComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Wire.h">
+    <ClInclude Include="potentialElements.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="potentialElements.h">
+    <ClInclude Include="Node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

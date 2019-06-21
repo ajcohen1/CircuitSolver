@@ -1,3 +1,4 @@
+#include "BoardComponent.h"
 #include "ActiveComponent.h"
 #include "BoardComponent.cpp"
 #include "potentialElements.cpp"
@@ -10,8 +11,12 @@ class ActiveComponent :
 	potentialElements::allElements elementName; 
 	int numId = 0;
 
-	ActiveComponent(BoardComponent& previousElement, potentialElements::allElements elementName, double magnitude, int multiplier, int numId) {
-		this->connections.push_front(previousElement);
+	ActiveComponent(BoardComponent* previousElement, potentialElements::allElements elementName, double magnitude, int multiplier) {
+		if (previousElement != nullptr)
+		{
+			this->connections.push_front(previousElement);
+		}
+
 		this->elementName = elementName;
 		this->magnitude = magnitude;
 		this->multiplier = multiplier;
