@@ -10,6 +10,7 @@
 	CircuitBoard::CircuitBoard(BoardComponent* firstComponent)
 	{
 		this->firstComponentPtr = firstComponent;
+		testingVar += 'T';
 
 	};
 
@@ -21,6 +22,7 @@
 
 	void CircuitBoard::addElement(BoardComponent* newComponent)
 	{
+		addNode();
 		firstComponentPtr->connections.push_front(newComponent);
 		testingVar += 'T';
 	}

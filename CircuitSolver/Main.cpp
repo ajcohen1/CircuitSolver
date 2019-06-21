@@ -10,8 +10,13 @@
 	potentialElements::allElements elementName = potentialElements::allElements::capacitor;
 	BoardComponent* num1 = new ActiveComponent(nullptr, elementName, 1.0, 1);
 	CircuitBoard* board = new CircuitBoard(num1);
+
+	elementName = potentialElements::allElements::capacitor;
+	BoardComponent* num2 = new ActiveComponent(board->firstComponentPtr, elementName, 1.0, 1);
+	board->addElement(num2);
+
 	board->printCircuit();
-	std::cout << 10;
+	std::cout << "yah done good, bucko";
 	return 0;
 }
 
