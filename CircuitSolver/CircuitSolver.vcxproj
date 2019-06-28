@@ -20,8 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActiveComponent.cpp" />
-    <ClCompile Include="BoardComponent.cpp" />
-    <ClCompile Include="CircuitBoard.cpp" />
+    <ClCompile Include="CircuitBuilder.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="potentialElements.cpp" />
     <ClCompile Include="Node.cpp" />
@@ -29,8 +28,7 @@
   <ItemGroup>
     <ClInclude Include="ActiveComponent.h" />
     <ClInclude Include="BoardComponent.h" />
-    <ClInclude Include="CircuitBoard.h" />
-    <ClInclude Include="Main.h" />
+    <ClInclude Include="CircuitBuilder.h" />
     <ClInclude Include="potentialElements.h" />
     <ClInclude Include="Node.h" />
   </ItemGroup>

@@ -1,8 +1,9 @@
 #include "Node.h"
 #include "BoardComponent.h"
 
-	bool isEssential = NULL;
+bool isEssential = false;
+std::string id = "";
 
-	Node::Node(BoardComponent *previousElement) {
-		this->connections.push_front(previousElement);
+	Node::Node(std::string id) {
+		this->id = id;
 	}

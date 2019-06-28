@@ -8,6 +8,7 @@ class ActiveComponent :
 {
 public:
 	ActiveComponent(BoardComponent* previousElement, potentialElements::allElements elementName, double magnitude, int multiplier);
+	std::string id;
 
 private:
 	double magnitude;

@@ -4,6 +4,8 @@ class Node :
 	public BoardComponent
 {
 public:
-	Node(BoardComponent* previousElement);
+	Node(std::string id);
+	std::string id;
+	bool isEssential;
 };
 

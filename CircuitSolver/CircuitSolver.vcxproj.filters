@@ -15,12 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CircuitBoard.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BoardComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ActiveComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -33,11 +27,11 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CircuitBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CircuitBoard.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BoardComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -50,7 +44,7 @@
     <ClInclude Include="Node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Main.h">
+    <ClInclude Include="CircuitBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

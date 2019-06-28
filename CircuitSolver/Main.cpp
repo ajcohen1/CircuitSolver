@@ -3,20 +3,18 @@
 #include "CircuitBoard.h"
 #include "Node.h"
 #include "ActiveComponent.h"
-#include "Main.h"
+#include <iostream>
+
 
 
 	int main() {
-	potentialElements::allElements elementName = potentialElements::allElements::capacitor;
-	BoardComponent* num1 = new ActiveComponent(nullptr, elementName, 1.0, 1);
-	CircuitBoard* board = new CircuitBoard(num1);
+		potentialElements::allElements elementName = potentialElements::allElements::voltageSupply;
+	BoardComponent* num1 = new ActiveComponent(nullptr, elementName,1.0, 1);
+	CircuitBoard* board = new CircuitBoard(num1, "V1");
 
-	elementName = potentialElements::allElements::capacitor;
-	BoardComponent* num2 = new ActiveComponent(board->firstComponentPtr, elementName, 1.0, 1);
-	board->addElement(num2);
+	BoardComponent* memAddress = board->getElementLocation("V1");
 
-	board->printCircuit();
-	std::cout << "yah done good, bucko";
+	std::cout << memAddress << std::endl;
 	return 0;
 }
 
