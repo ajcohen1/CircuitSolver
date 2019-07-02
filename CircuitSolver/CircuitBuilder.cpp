@@ -1,28 +1,26 @@
 #include "CircuitBuilder.h"
 #include "BoardComponent.h"
-#include "Node.h"
 #include <list>
 #include <string>
-#include <iostream>
+#include "CircuitBoard.h"
 
-//this will act as a cursor that connects a user to the overall linked list
-BoardComponent firstComponent;
-
-//count of nodes
-int nodeCount = 0;
+//this is the overall graph
+std::list<BoardComponent*> circuitGraph;
 
 //this will be a map to all the components of the circuit
 std::unordered_map<std::string, BoardComponent*> componentLocator;
 
 //this sets the first link in the circuit linked list
-CircuitBuilder::CircuitBuilder(BoardComponent initialComponent) {
+CircuitBuilder::CircuitBuilder(BoardComponent* initialComponent) {
 
-	//make a shallow copy of the parameter into our initial 
-	firstComponent = initialComponent;
-	std::string firstCompId = initialComponent.id;
-	
+	std::string testID = initialComponent->id;
+
+
 	//add to locator map
-	componentLocator[firstCompId] = &firstComponent;
+	componentLocator[initialComponent->id] = initialComponent;
+
+	//add to graph
+	circuitGraph.push_back(initialComponent);
 }
 
 //given the id of an element, you will get its memory address
@@ -30,97 +28,74 @@ BoardComponent* CircuitBuilder::locate(std::string id) {
 	return componentLocator.at(id);
 }
 
-//creates a new node
-Node* CircuitBuilder::createNode() {
-	nodeCount++;
-	std::string nodeId = "N" + nodeCount;
-	Node* newNode = new Node(nodeId);
-	return newNode;
-}
-
-
-//updates attributes of node whenever a node is modified or added
-void CircuitBuilder::updateNode(Node* node) {
-
-	//updates if essential
-	if (node->connections.size > 1)
-		node->isEssential = true;
-
-	/*
-
-	NOTE:
-
-	CONSIDER CREATING A VECTOR OF ESSENTIAL NODES
-
-	*/
-
-	//updates id
-
-	/*
-
-
-	NOTE:
-
-	NEED TO REMOVE KEY FROM HASHMAP IF THEY DIFFER
-	AND ADD IN NEW HASH KEY
-
-
-	*/
-	std::string updatedId = "";
-
-	for (BoardComponent* component : node->connections)
-		updatedId += component->id;
-
-	node->id = updatedId;
-}
-
 //connects a new component to a single element on the circuit board
 void CircuitBuilder::connectToSingle(std::string id, BoardComponent* newComponent) {
-	BoardComponent* adjacentComponent = locate(id);
+	
+	//finds element that newComp will be connected to
+	BoardComponent* neighborComp = locate(id);
 
-	Node* newNode = createNode();
+	//connects newComp to neighbor's connections
+	neighborComp->connections.push_back(newComponent);
 
-	//add node to adjacent component connections
-	adjacentComponent->connections.push_back(newNode);
+	//connects the neighbor to newComp's  connections
+	newComponent->connections.push_back(neighborComp);
 
-	//add adjacent component to node connections
-	newNode->connections.push_front(adjacentComponent);
+	//adds newComp to map
+	componentLocator[newComponent->id] = newComponent;
 
-	//add new component to node connections
-	newNode->connections.push_front(newComponent);
-
-	//update newNode
-	updateNode(newNode);
-
-	//add node to newComponenet connections
-	newComponent->connections.push_front(newNode);
+	//adds newComp to graph
+	circuitGraph.push_back(newComponent);
 }
 
 //connects a new component to multiple elements on the circuit board
 void CircuitBuilder::connectToAll(BoardComponent* newComponent, std::string allConnections[], int numComponents) {
+
+	//add new component to Circuit and componentLocator
+	componentLocator[newComponent->id] = newComponent;
+	circuitGraph.push_back(newComponent);
+
+
 	for (int numComponent = 0; numComponent < numComponents; numComponent++) {
-		connectToSingle(allConnections[numComponent], newComponent);
+
+		//get the neigboring component
+		std::string neighborCompId = allConnections[numComponent];
+		BoardComponent* neighborComp = locate(neighborCompId);
+
+		//connect the newComp to neighbors connections
+		neighborComp->connections.push_back(newComponent);
+
+		//connect the neighbor to newComps connections
+		newComponent->connections.push_back(neighborComp);
+
 	}
 }
+
 
 void CircuitBuilder::remove(std::string id)
 {
 	BoardComponent* compToBeRemoved = locate(id);
-	auto allConnections = compToBeRemoved->connections;
-	for (BoardComponent* singleConnection : allConnections) {
-
-		//remove connections to compToBeReomved
-
-		//get to connected element and its connections
-		BoardComponent* connectedComponent = allConnections.front;
-		std::list<BoardComponent*> connectedComponentConnections = connectedComponent->connections;
-
-		//remove compToBeRemoved
-		connectedComponentConnections.remove(compToBeRemoved);
-
-	}
-
-	//removed connections from compToBeRemoved
-	allConnections.erase;
+	compToBeRemoved->~BoardComponent();
+	componentLocator.erase(id);
+	circuitGraph.remove(compToBeRemoved);
+	delete compToBeRemoved;
 }
 
+void CircuitBuilder::replace(std::string idOfComponentToBeReplaced, BoardComponent* replaceeComponent)
+{
+	BoardComponent* compToBeReplaced = locate(idOfComponentToBeReplaced);
+	auto remainingConnections = compToBeReplaced->connections;
+	remove(idOfComponentToBeReplaced);
+
+	for (auto aConnection : remainingConnections) {
+		replaceeComponent->connections.push_back(aConnection);
+		aConnection->connections.push_back(replaceeComponent);
+	}
+
+	componentLocator[replaceeComponent->id] = replaceeComponent;
+	circuitGraph.push_back(replaceeComponent);
+}
+
+std::list<BoardComponent*> CircuitBuilder::getCircuitGraph()
+{
+	return circuitGraph;
+}

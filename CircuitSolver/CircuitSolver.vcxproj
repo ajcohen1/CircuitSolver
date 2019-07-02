@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -20,14 +20,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActiveComponent.cpp" />
+    <ClCompile Include="BoardComponent.cpp" />
+    <ClCompile Include="CircuitBoard.cpp" />
     <ClCompile Include="CircuitBuilder.cpp" />
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="potentialElements.cpp" />
     <ClCompile Include="Node.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActiveComponent.h" />
     <ClInclude Include="BoardComponent.h" />
+    <ClInclude Include="CircuitBoard.h" />
     <ClInclude Include="CircuitBuilder.h" />
     <ClInclude Include="potentialElements.h" />
     <ClInclude Include="Node.h" />

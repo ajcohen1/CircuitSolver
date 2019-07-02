@@ -4,10 +4,10 @@
 
 
 class ActiveComponent :
-	public BoardComponent
+	virtual public BoardComponent
 {
 public:
-	ActiveComponent(BoardComponent* previousElement, potentialElements::allElements elementName, double magnitude, int multiplier);
+	ActiveComponent(potentialElements::allElements elementName, std::string id,double magnitude, int multiplier);
 	std::string id;
 
 private:

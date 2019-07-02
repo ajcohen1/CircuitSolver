@@ -8,23 +8,19 @@
 class CircuitBuilder
 {
 private:
-	BoardComponent firstComponent;
+	BoardComponent* firstComponent;
+	std::list<BoardComponent*> circuitGraph;
 public:
 	std::unordered_map<std::string, BoardComponent*> componentLocator;
 
 	//methods
-	CircuitBuilder(BoardComponent initialComponent);
+	CircuitBuilder(BoardComponent* initialComponent);
 	BoardComponent* locate(std::string id);
 	void remove(std::string id);
-	void replace(std::string idOfComponentToBeReplaced, BoardComponent replaceeComponent);
+	void replace(std::string idOfComponentToBeReplaced, BoardComponent* replaceeComponent);
 	void connectToSingle(std::string id, BoardComponent* newComponent);
-	void connectBetween(BoardComponent newComponent, std::string idOfCompBefore, std::string idOfCompAfter);
 	void connectToAll(BoardComponent* newComponent, std::string allConnections[], int numComponents);
-	
-	Node* createNode();
-	void updateNode(Node* node);
-
-
+	std::list<BoardComponent*> getCircuitGraph();
 };
 
 

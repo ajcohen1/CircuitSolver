@@ -5,7 +5,6 @@ class Node :
 {
 public:
 	Node(std::string id);
-	std::string id;
-	bool isEssential;
+
 };
 
