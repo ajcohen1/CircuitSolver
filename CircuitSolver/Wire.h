@@ -1,10 +1,9 @@
 #pragma once
 #include "BoardComponent.h"
-class Node :
+class Wire :
 	public BoardComponent
 {
 public:
-	Node(std::string id);
-
+	Wire(std::string id);
 };
 

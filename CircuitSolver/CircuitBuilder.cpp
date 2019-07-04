@@ -8,7 +8,7 @@
 std::list<BoardComponent*> circuitGraph;
 
 //this will be a map to all the components of the circuit
-std::unordered_map<std::string, BoardComponent*> componentLocator;
+std::map<std::string, BoardComponent*> componentLocator;
 
 //this sets the first link in the circuit linked list
 CircuitBuilder::CircuitBuilder(BoardComponent* initialComponent) {
@@ -98,4 +98,26 @@ void CircuitBuilder::replace(std::string idOfComponentToBeReplaced, BoardCompone
 std::list<BoardComponent*> CircuitBuilder::getCircuitGraph()
 {
 	return circuitGraph;
+}
+
+std::vector<BoardComponent*> CircuitBuilder::getNodes() {
+	
+	//set up container of nodes
+	std::vector<BoardComponent*> allNodes;
+
+	//begin searching
+	bool isWire;
+	for (auto const& mapper : componentLocator) {
+
+		BoardComponent* component = mapper.second;
+		auto componentType = component->compType;
+
+		isWire = (componentType == BoardComponent::WIRE);
+
+		if (isWire) {
+			allNodes.push_back(component);
+		}
+	}
+
+	return allNodes;
 }

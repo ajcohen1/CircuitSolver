@@ -1,17 +1,16 @@
 #pragma once
 
 #include "BoardComponent.h"
-#include "Node.h"
 #include <string>
-#include <unordered_map>
+#include <map>
+#include <vector>
 
 class CircuitBuilder
 {
 private:
-	BoardComponent* firstComponent;
 	std::list<BoardComponent*> circuitGraph;
 public:
-	std::unordered_map<std::string, BoardComponent*> componentLocator;
+	std::map<std::string, BoardComponent*> componentLocator;
 
 	//methods
 	CircuitBuilder(BoardComponent* initialComponent);
@@ -21,6 +20,7 @@ public:
 	void connectToSingle(std::string id, BoardComponent* newComponent);
 	void connectToAll(BoardComponent* newComponent, std::string allConnections[], int numComponents);
 	std::list<BoardComponent*> getCircuitGraph();
+	std::vector<BoardComponent*> getNodes();
 };
 
 

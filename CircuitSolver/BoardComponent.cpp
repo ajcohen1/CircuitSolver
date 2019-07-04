@@ -1,13 +1,14 @@
 #include "BoardComponent.h"
-#include <iostream>
 
-BoardComponent::BoardComponent(std::string id = ""): id(id) {
+BoardComponent::BoardComponent(std::string id, allCompTypes componentName, double magnitude, double multiplier) {
 	this->id = id;
+	this->compType = componentName;
+	this->magnitude = magnitude;
+	this->multiplier = multiplier;
 }
 
-BoardComponent::~BoardComponent() {
-	
-	//access each individual connection
+BoardComponent::~BoardComponent(){
+
 	auto allConnections = this->connections;
 	for (auto aConnection : allConnections) {
 
@@ -16,4 +17,5 @@ BoardComponent::~BoardComponent() {
 		allNeighborConnections.remove(this);
 
 	}
+
 }

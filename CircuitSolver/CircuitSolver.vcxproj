@@ -19,20 +19,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ActiveComponent.cpp" />
     <ClCompile Include="BoardComponent.cpp" />
     <ClCompile Include="CircuitBoard.cpp" />
     <ClCompile Include="CircuitBuilder.cpp" />
-    <ClCompile Include="potentialElements.cpp" />
-    <ClCompile Include="Node.cpp" />
+    <ClCompile Include="PassiveComponent.cpp" />
+    <ClCompile Include="PowerSupply.cpp" />
+    <ClCompile Include="Wire.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ActiveComponent.h" />
     <ClInclude Include="BoardComponent.h" />
     <ClInclude Include="CircuitBoard.h" />
     <ClInclude Include="CircuitBuilder.h" />
-    <ClInclude Include="potentialElements.h" />
-    <ClInclude Include="Node.h" />
+    <ClInclude Include="PassiveComponent.h" />
+    <ClInclude Include="PowerSupply.h" />
+    <ClInclude Include="Wire.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -92,6 +92,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\16623\Downloads\EIGEN\eigen-eigen-362e736a6e78</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
