@@ -12,8 +12,9 @@ public:
 	CircuitBoard(CircuitBuilder* cb);
 	void printBoard();
 	void fillMatrix();
-	std::string fillRow(BoardComponent* node);
-	std::string findSecondNumerator(BoardComponent* connection, BoardComponent* originalConnectee);
+	std::string getNodeEquation(BoardComponent* node);
+	std::string getPositiveExpression(BoardComponent* connection, BoardComponent* primaryNode);
+	std::string getNegativeExpression(BoardComponent* connection, BoardComponent* primaryNode);
 
 
 };
