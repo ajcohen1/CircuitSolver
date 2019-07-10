@@ -9,6 +9,7 @@ public:
 	Eigen::MatrixXd circuitMatrix;
 	std::list<BoardComponent*> cg;
 	CircuitBuilder* cb;
+	bool vsAdjacent;
 	CircuitBoard(CircuitBuilder* cb);
 	void printBoard();
 	void fillMatrix();

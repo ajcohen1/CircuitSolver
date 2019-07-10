@@ -11,6 +11,7 @@
 std::list<BoardComponent*> cg;
 CircuitBuilder* cb;
 Eigen::MatrixXd circuitMatrix;
+bool vsAdjacent = false;
 
 std::string eqnsTstString = "";
 
@@ -43,7 +44,7 @@ void CircuitBoard::fillMatrix()
 
 	//ARE NOT FILLING MATRIX YET
 
-	// int numEqns = allNodes.size();
+	// int numEqns = allNodes.size()-1;
 	// circuitMatrix(numEqns, numEqns);
 
 	//fill all rows of matrix
@@ -60,17 +61,17 @@ std::string CircuitBoard::getNodeEquation(BoardComponent* primaryNode) {
 	auto surroudingBridges = primaryNode->connections;
 	std::string equation = "";
 
-	std::string numerator1;
-	std::string numerator2;
+	std::string positiveExpression;
+	std::string negativeExpression;
 	for (BoardComponent* bridge : surroudingBridges) {
 
-		numerator1 = getPositiveExpression(bridge, primaryNode);
+		positiveExpression = getPositiveExpression(bridge, primaryNode);
 
-		equation += numerator1;
+		equation += positiveExpression;
 
-		numerator2 = getNegativeExpression(bridge, primaryNode);
-		if (numerator2 != "") {
-			equation += " - " + numerator2;
+		negativeExpression = getNegativeExpression(bridge, primaryNode);
+		if (negativeExpression != "") {
+			equation += " - " + negativeExpression;
 		}
 		
 
@@ -87,6 +88,7 @@ std::string CircuitBoard::getNodeEquation(BoardComponent* primaryNode) {
 std::string CircuitBoard::getPositiveExpression(BoardComponent* bridge, BoardComponent* primaryNode)
 {
 	std::string expression = "";
+
 	BoardComponent* refNode = *(--primaryNode->connections.end());
 
 	//if bridge is a current source
@@ -99,7 +101,6 @@ std::string CircuitBoard::getPositiveExpression(BoardComponent* bridge, BoardCom
 
 	//if bridge is a voltage source
 	bool bridgeVoltageSource = (bridge->compType == BoardComponent::AC_Voltage) || (bridge->compType == BoardComponent::DC_Voltage);
-
 	//TODO
 
 	//end
@@ -118,7 +119,7 @@ std::string CircuitBoard::getNegativeExpression(BoardComponent* bridge, BoardCom
 	std::string expression = "";
 	BoardComponent* refNode = *(--cb->getNodes().end());
 
-	//if bridge is a current source
+	//if bridge is a power source
 	bool bridgeCurrentSource = (bridge->compType == BoardComponent::AC_Current) || (bridge->compType == BoardComponent::DC_Current) || (bridge->compType == BoardComponent::AC_Voltage) || (bridge->compType == BoardComponent::DC_Voltage);
 	if (bridgeCurrentSource) {
 		return "";
@@ -152,7 +153,7 @@ std::string CircuitBoard::getNegativeExpression(BoardComponent* bridge, BoardCom
 
 int main() {
 		std::string id = "";
-		BoardComponent* e1 = new PowerSupply("CS1", PowerSupply::allCompTypes::DC_Current, 2.0, 1.0);
+		BoardComponent* e1 = new PowerSupply("VS1", PowerSupply::allCompTypes::DC_Voltage, 2.0, 1.0);
 		BoardComponent* e2 = new Wire("N1");
 		BoardComponent* e3 = new PassiveComponent("R1", PassiveComponent::allCompTypes::RESISTOR, 5.0, 1.0);
 		BoardComponent* e4 = new Wire("N2");
@@ -163,7 +164,7 @@ int main() {
 		BoardComponent* e9 = new Wire("N4");
 
 		CircuitBuilder* cb = new CircuitBuilder(e1);
-		cb->connectToSingle("CS1", e2);
+		cb->connectToSingle("VS1", e2);
 		cb->connectToSingle("N1", e3);
 		cb->connectToSingle("R1", e4);
 		cb->connectToSingle("N2", e5);
@@ -171,7 +172,7 @@ int main() {
 		cb->connectToSingle("R2", e7);
 		cb->connectToSingle("N3", e8);
 
-		std::string eArr[] = { "CS1", "R3", "R4" };
+		std::string eArr[] = { "VS1", "R3", "R4" };
 
 		cb->connectToAll(e9, eArr, 3);
 		CircuitBoard* cBoard = new CircuitBoard(cb);
