@@ -15,42 +15,84 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CircuitBuilder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CircuitBoard.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BoardComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PassiveComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PowerSupply.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Wire.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="NonWire.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ActiveComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VoltageSource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CurrentSource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PassiveComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Resistor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Capacitor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Inductor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CircuitBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CircuitSimplifierAndInfoExtracter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NodeEquationMakerAndSolver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CircuitBuilder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CircuitBoard.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BoardComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PassiveComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Wire.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PowerSupply.h">
+    <ClInclude Include="NonWire.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ActiveComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VoltageSource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CurrentSource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PassiveComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resistor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Capacitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Inductor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CircuitBuilder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CircuitSimplifierAndInfoExtracter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NodeEquationMakerAndSolver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

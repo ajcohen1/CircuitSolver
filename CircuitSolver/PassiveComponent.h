@@ -1,11 +1,12 @@
 #pragma once
-
-#include "BoardComponent.h"
-#include <string>
+#include "NonWire.h"
+#include <complex>
 class PassiveComponent :
-	public BoardComponent
+	public NonWire
 {
 public:
-	PassiveComponent(std::string id,allCompTypes componentName, double magnitude, double multiplier);
+	std::complex<double> impedance;
+	PassiveComponent(std::string id, double magnitude, double multiplier);
+	virtual void setImpedance(double frequency);
 };
 

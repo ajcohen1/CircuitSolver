@@ -1,26 +1,30 @@
 #pragma once
-
-#include "BoardComponent.h"
 #include <string>
-#include <map>
+#include "NonWire.h"
 #include <vector>
-
+#include <unordered_map>
+#include "ActiveComponent.h"
 class CircuitBuilder
 {
-private:
-	std::list<BoardComponent*> circuitGraph;
 public:
-	std::map<std::string, BoardComponent*> componentLocator;
+	enum currentTypes {DC, AC};
+	enum connectionLocation { prev, next };
+	currentTypes currentType;
+	std::vector<NonWire*> circuitDraft;
+	std::unordered_map<std::string, NonWire*> nonWireMap;
 
-	//methods
-	CircuitBuilder(BoardComponent* initialComponent);
-	BoardComponent* locate(std::string id);
-	void remove(std::string id);
-	void replace(std::string idOfComponentToBeReplaced, BoardComponent* replaceeComponent);
-	void connectToSingle(std::string id, BoardComponent* newComponent);
-	void connectToAll(BoardComponent* newComponent, std::string allConnections[], int numComponents);
-	std::list<BoardComponent*> getCircuitGraph();
-	std::vector<BoardComponent*> getNodes();
+	CircuitBuilder(ActiveComponent* firstComp);
+	void connectToSingle(NonWire* newComp, std::string idOfConnectee);
+	void connectToAll(NonWire* newComp, std::vector<std::string> idOfAllConnectees);
+	std::vector<NonWire*> getCircuit();
+	//void connectSingleElementToFirstCompGround(std::string);
+	//void connectAllElementsToFirstCompGround(std::vector<std::string> idOfAllElements);
+	//void remove(std::string compId);
+	//void combineWires(Wire* wire1, Wire* wire2);
+
+private:
+	void addNewCompToLocatorAndCircuitDraft(NonWire* newComp);
+	void connectWireAndElement(Wire* wire, NonWire* element, connectionLocation cl);
+	NonWire* locate(std::string id);
 };
-
 

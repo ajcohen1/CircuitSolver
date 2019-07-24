@@ -19,19 +19,33 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ActiveComponent.cpp" />
     <ClCompile Include="BoardComponent.cpp" />
-    <ClCompile Include="CircuitBoard.cpp" />
+    <ClCompile Include="Capacitor.cpp" />
     <ClCompile Include="CircuitBuilder.cpp" />
+    <ClCompile Include="CircuitSimplifierAndInfoExtracter.cpp" />
+    <ClCompile Include="Inductor.cpp" />
+    <ClCompile Include="NodeEquationMakerAndSolver.cpp" />
+    <ClCompile Include="NonWire.cpp" />
+    <ClCompile Include="CurrentSource.cpp" />
     <ClCompile Include="PassiveComponent.cpp" />
-    <ClCompile Include="PowerSupply.cpp" />
+    <ClCompile Include="Resistor.cpp" />
+    <ClCompile Include="VoltageSource.cpp" />
     <ClCompile Include="Wire.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ActiveComponent.h" />
     <ClInclude Include="BoardComponent.h" />
-    <ClInclude Include="CircuitBoard.h" />
+    <ClInclude Include="Capacitor.h" />
     <ClInclude Include="CircuitBuilder.h" />
+    <ClInclude Include="CircuitSimplifierAndInfoExtracter.h" />
+    <ClInclude Include="CurrentSource.h" />
+    <ClInclude Include="Inductor.h" />
+    <ClInclude Include="NodeEquationMakerAndSolver.h" />
+    <ClInclude Include="NonWire.h" />
     <ClInclude Include="PassiveComponent.h" />
-    <ClInclude Include="PowerSupply.h" />
+    <ClInclude Include="Resistor.h" />
+    <ClInclude Include="VoltageSource.h" />
     <ClInclude Include="Wire.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

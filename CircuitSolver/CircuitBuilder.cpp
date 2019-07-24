@@ -1,123 +1,111 @@
 #include "CircuitBuilder.h"
-#include "BoardComponent.h"
-#include <list>
-#include <string>
-#include "CircuitBoard.h"
+#include "PassiveComponent.h"
+#include "ActiveComponent.h"
+#include "Wire.h"
+#include <iostream>
 
-//this is the overall graph
-std::list<BoardComponent*> circuitGraph;
+enum currentTypes { DC, AC };
+currentTypes currentType;
+std::vector<NonWire*> circuitDraft;
+std::unordered_map<std::string, NonWire*> nonWireMap;
 
-//this will be a map to all the components of the circuit
-std::map<std::string, BoardComponent*> componentLocator;
+CircuitBuilder::CircuitBuilder(ActiveComponent* firstComp)
+{
 
-//this sets the first link in the circuit linked list
-CircuitBuilder::CircuitBuilder(BoardComponent* initialComponent) {
+	//get the current type
+	currentType = currentTypes::AC;
+	if (firstComp->frequency == NULL)
+		currentType = currentTypes::DC;
 
-	std::string testID = initialComponent->id;
+	//add newComp to locator and adjaceny graph
+	addNewCompToLocatorAndCircuitDraft(firstComp);
 
-
-	//add to locator map
-	componentLocator[initialComponent->id] = initialComponent;
-
-	//add to graph
-	circuitGraph.push_back(initialComponent);
 }
 
-//given the id of an element, you will get its memory address
-BoardComponent* CircuitBuilder::locate(std::string id) {
-	return componentLocator.at(id);
+NonWire* CircuitBuilder::locate(std::string id)
+{
+	return nonWireMap[id];
 }
 
-//connects a new component to a single element on the circuit board
-void CircuitBuilder::connectToSingle(std::string id, BoardComponent* newComponent) {
+void CircuitBuilder::connectWireAndElement(Wire* wire, NonWire* element, connectionLocation cl)
+{
+	//connect wire to element
+	wire->connections.push_back(element);
+
+	//connect element to wire...
+
+	//determine if should connect to prev or next
+	if (cl == connectionLocation::next) {
+		element->next = wire;
+	}
+	else {
+		element->prev = wire;
+	}
+}
+
+void CircuitBuilder::connectToSingle(NonWire* newComp, std::string idOfConnectee)
+{
+	//get wire to be connected to, known as connectee
+	NonWire* connectee = locate(idOfConnectee);
+
+	//create the new wire
+	Wire* wire = new Wire("test");
+
+	//add the wire to the conectee
+	connectWireAndElement(wire, connectee, connectionLocation::next);
+
+	//add the wire to the newComponent
+	connectWireAndElement(wire, newComp, connectionLocation::prev);
+
+	//add newComp to locator and adjaceny graph
+	addNewCompToLocatorAndCircuitDraft(newComp);
+
+}
+
+void CircuitBuilder::connectToAll(NonWire* newComp, std::vector<std::string> idOfAllConnectees)
+{
+	//create the new wire to be connected to all the connectees
+	Wire* wire = new Wire("test");
+
+	//now connect the wire to all the connectees and the newComp
+	for (std::string connecteeName : idOfAllConnectees)
+	{
+		//get the individual connectee from the container of all conectees
+		NonWire* connectee = locate(connecteeName);
+
+		//now connect it to the wire
+		connectWireAndElement(wire, connectee, connectionLocation::next);
+	}
 	
-	//finds element that newComp will be connected to
-	BoardComponent* neighborComp = locate(id);
+	//now connect the newComp to the wire connected to all the connectees
+	connectWireAndElement(wire, newComp, connectionLocation::prev);
 
-	//connects newComp to neighbor's connections
-	neighborComp->connections.push_back(newComponent);
-
-	//connects the neighbor to newComp's  connections
-	newComponent->connections.push_back(neighborComp);
-
-	//adds newComp to map
-	componentLocator[newComponent->id] = newComponent;
-
-	//adds newComp to graph
-	circuitGraph.push_back(newComponent);
+	//add newComp to locator and adjaceny graph
+	addNewCompToLocatorAndCircuitDraft(newComp);
 }
 
-//connects a new component to multiple elements on the circuit board
-void CircuitBuilder::connectToAll(BoardComponent* newComponent, std::string allConnections[], int numComponents) {
-
-	//add new component to Circuit and componentLocator
-	componentLocator[newComponent->id] = newComponent;
-	circuitGraph.push_back(newComponent);
-
-
-	for (int numComponent = 0; numComponent < numComponents; numComponent++) {
-
-		//get the neigboring component
-		std::string neighborCompId = allConnections[numComponent];
-		BoardComponent* neighborComp = locate(neighborCompId);
-
-		//connect the newComp to neighbors connections
-		neighborComp->connections.push_back(newComponent);
-
-		//connect the neighbor to newComps connections
-		newComponent->connections.push_back(neighborComp);
-
-	}
-}
-
-
-void CircuitBuilder::remove(std::string id)
+void CircuitBuilder::addNewCompToLocatorAndCircuitDraft(NonWire* newComp)
 {
-	BoardComponent* compToBeRemoved = locate(id);
-	compToBeRemoved->~BoardComponent();
-	componentLocator.erase(id);
-	circuitGraph.remove(compToBeRemoved);
-	delete compToBeRemoved;
+	nonWireMap[newComp->id] = newComp;
+	circuitDraft.push_back(newComp);
 }
 
-void CircuitBuilder::replace(std::string idOfComponentToBeReplaced, BoardComponent* replaceeComponent)
+std::vector<NonWire*> CircuitBuilder::getCircuit()
 {
-	BoardComponent* compToBeReplaced = locate(idOfComponentToBeReplaced);
-	auto remainingConnections = compToBeReplaced->connections;
-	remove(idOfComponentToBeReplaced);
-
-	for (auto aConnection : remainingConnections) {
-		replaceeComponent->connections.push_back(aConnection);
-		aConnection->connections.push_back(replaceeComponent);
-	}
-
-	componentLocator[replaceeComponent->id] = replaceeComponent;
-	circuitGraph.push_back(replaceeComponent);
+	return circuitDraft;
 }
 
-std::list<BoardComponent*> CircuitBuilder::getCircuitGraph()
+
+int main()
 {
-	return circuitGraph;
-}
+	ActiveComponent* vs = new ActiveComponent("V1", 5.0, 1.0);
+	PassiveComponent* r = new PassiveComponent("R1", 1.0, 2);
 
-std::vector<BoardComponent*> CircuitBuilder::getNodes() {
-	
-	//set up container of nodes
-	std::vector<BoardComponent*> allNodes;
+	CircuitBuilder* cb = new CircuitBuilder(vs);
+	cb->connectToSingle(r, "V1");
 
-	//begin searching
-	bool isWire;
-	for (auto const& mapper : componentLocator) {
+	//print the circuit
+	auto circuitGraph = cb->getCircuit();
 
-		BoardComponent* component = mapper.second;
-		auto componentType = component->compType;
-
-		isWire = (componentType == BoardComponent::WIRE);
-
-		if (isWire) {
-			allNodes.push_back(component);
-		}
-	}
-
-	return allNodes;
+	std::cout << (circuitGraph.size());
 }
