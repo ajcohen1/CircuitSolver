@@ -48,10 +48,16 @@
     <ClCompile Include="CircuitBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CircuitSimplifierAndInfoExtracter.cpp">
+    <ClCompile Include="CircuitSimplifier.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NodeEquationMakerAndSolver.cpp">
+    <ClCompile Include="SimplifiedCircuitInfoExtracter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NodeEquationMatrixFillerAndSolver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CircuitSolver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -89,10 +95,16 @@
     <ClInclude Include="CircuitBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CircuitSimplifierAndInfoExtracter.h">
+    <ClInclude Include="CircuitSimplifier.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NodeEquationMakerAndSolver.h">
+    <ClInclude Include="SimplifiedCircuitInfoExtracter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NodeEquationMatrixFillerAndSolver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CircuitSolver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

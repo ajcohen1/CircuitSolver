@@ -6,7 +6,7 @@ class PassiveComponent :
 {
 public:
 	std::complex<double> impedance;
-	PassiveComponent(std::string id, double magnitude, double multiplier);
+	PassiveComponent(std::string id, double magnitude, double multiplier, std::string unit);
 	virtual void setImpedance(double frequency);
 };
 

@@ -23,13 +23,15 @@
     <ClCompile Include="BoardComponent.cpp" />
     <ClCompile Include="Capacitor.cpp" />
     <ClCompile Include="CircuitBuilder.cpp" />
-    <ClCompile Include="CircuitSimplifierAndInfoExtracter.cpp" />
+    <ClCompile Include="CircuitSimplifier.cpp" />
+    <ClCompile Include="CircuitSolver.cpp" />
     <ClCompile Include="Inductor.cpp" />
-    <ClCompile Include="NodeEquationMakerAndSolver.cpp" />
+    <ClCompile Include="NodeEquationMatrixFillerAndSolver.cpp" />
     <ClCompile Include="NonWire.cpp" />
     <ClCompile Include="CurrentSource.cpp" />
     <ClCompile Include="PassiveComponent.cpp" />
     <ClCompile Include="Resistor.cpp" />
+    <ClCompile Include="SimplifiedCircuitInfoExtracter.cpp" />
     <ClCompile Include="VoltageSource.cpp" />
     <ClCompile Include="Wire.cpp" />
   </ItemGroup>
@@ -38,13 +40,15 @@
     <ClInclude Include="BoardComponent.h" />
     <ClInclude Include="Capacitor.h" />
     <ClInclude Include="CircuitBuilder.h" />
-    <ClInclude Include="CircuitSimplifierAndInfoExtracter.h" />
+    <ClInclude Include="CircuitSimplifier.h" />
+    <ClInclude Include="CircuitSolver.h" />
     <ClInclude Include="CurrentSource.h" />
     <ClInclude Include="Inductor.h" />
-    <ClInclude Include="NodeEquationMakerAndSolver.h" />
+    <ClInclude Include="NodeEquationMatrixFillerAndSolver.h" />
     <ClInclude Include="NonWire.h" />
     <ClInclude Include="PassiveComponent.h" />
     <ClInclude Include="Resistor.h" />
+    <ClInclude Include="SimplifiedCircuitInfoExtracter.h" />
     <ClInclude Include="VoltageSource.h" />
     <ClInclude Include="Wire.h" />
   </ItemGroup>

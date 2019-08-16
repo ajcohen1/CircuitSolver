@@ -11,6 +11,6 @@ public:
 	double multiplier;
 	std::string unit;
 
-	NonWire(std::string id, double magnitude, double multiplier);
+	NonWire(std::string id, double magnitude, double multiplier, std::string unit);
 	~NonWire();
 };

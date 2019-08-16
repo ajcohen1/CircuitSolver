@@ -12,18 +12,21 @@ public:
 	currentTypes currentType;
 	std::vector<NonWire*> circuitDraft;
 	std::unordered_map<std::string, NonWire*> nonWireMap;
+	unsigned long int wireCnt = 0;
 
 	CircuitBuilder(ActiveComponent* firstComp);
-	void connectToSingle(NonWire* newComp, std::string idOfConnectee);
+	void connectToSingle(NonWire* newComp, std::string idOfConnectee, Wire* connectionPort);
 	void connectToAll(NonWire* newComp, std::vector<std::string> idOfAllConnectees);
 	std::vector<NonWire*> getCircuit();
-	//void connectSingleElementToFirstCompGround(std::string);
-	//void connectAllElementsToFirstCompGround(std::vector<std::string> idOfAllElements);
-	//void remove(std::string compId);
-	//void combineWires(Wire* wire1, Wire* wire2);
+	void printCircuit();
+	void remove(std::string idOfCompToBeRemoved);
+	void addNewCompToLocatorAndCircuitDraft(NonWire* newComp);
+	void connectWireAndElement(Wire* wire, NonWire* element, Wire*& connectionPort);
+	Wire* getNewWire();
 
 private:
-	void addNewCompToLocatorAndCircuitDraft(NonWire* newComp);
+	void removeExternalConnections(Wire** wire, NonWire* compToBeRemoved);
+	std::string getConnectionIDs(NonWire* element, Wire* adjacentWire);
 	void connectWireAndElement(Wire* wire, NonWire* element, connectionLocation cl);
 	NonWire* locate(std::string id);
 };

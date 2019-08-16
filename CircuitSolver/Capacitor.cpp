@@ -2,9 +2,8 @@
 # define M_PI           3.14159265358979323846
 #include <cmath>
 
-Capacitor::Capacitor(std::string id, double magnitude, double multiplier) : PassiveComponent(id, magnitude, multiplier)
+Capacitor::Capacitor(std::string id, double magnitude, double multiplier) : PassiveComponent(id, magnitude, multiplier, "F")
 {
-	this->unit = "F";
 }
 
 void Capacitor::setImpedance(double frequency)

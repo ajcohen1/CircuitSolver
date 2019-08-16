@@ -7,7 +7,7 @@ public:
 	double frequency;
 	double phasor;
 
-	ActiveComponent(std::string id, double magnitude, double multiplier, double frequency, double phasor);
-	ActiveComponent(std::string id, double magnitude, double multiplier);
+	ActiveComponent(std::string id, double magnitude, double multiplier, std::string unit, double frequency, double phasor);
+	ActiveComponent(std::string id, double magnitude, double multiplier, std::string unit);
 };
 

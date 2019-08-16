@@ -1,6 +1,6 @@
 #include "PassiveComponent.h"
 
-PassiveComponent::PassiveComponent(std::string id, double magnitude, double multiplier) : NonWire(id, magnitude, multiplier)
+PassiveComponent::PassiveComponent(std::string id, double magnitude, double multiplier, std::string unit) : NonWire(id, magnitude, multiplier, unit)
 {
 }
 
