@@ -60,6 +60,9 @@
     <ClCompile Include="CircuitSolver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\Downloads\libfort-develop\libfort-develop\lib\fort.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoardComponent.h">

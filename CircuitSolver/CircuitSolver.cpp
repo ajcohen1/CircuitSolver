@@ -1,7 +1,11 @@
 #include "CircuitSolver.h"
 #include <iostream>
+
 #include "Inductor.h"
 #include "Capacitor.h"
+#include "fort.hpp"
+#include <Windows.h>
+#include <stdio.h>
 
 CircuitSolver::CircuitSolver(std::unordered_map<std::string, double> nodeVoltages, std::vector<NonWire*> simplifiedCircuit) : nodeVoltages(nodeVoltages), simplifiedCircuit(simplifiedCircuit){}
 
@@ -187,22 +191,26 @@ int main()
 	//cb->connectWireAndElement(v2->next, vs, (vs->prev));
 
 	//Series Combo circuit
-	cb->connectToSingle(cs1, "V1", nullptr);
-	cb->connectToSingle(r, "CS1", nullptr);
-	cb->connectToSingle(v2, "R1", nullptr);
-	cb->connectToSingle(i, "V2", nullptr);
-	cb->connectToSingle(r2, "I1", nullptr);
-	Wire* wire = cb->getNewWire();
-	cb->connectWireAndElement(wire, vs, vs->prev);
-	cb->connectWireAndElement(wire, r2, r2->next);
+	//cb->connectToSingle(cs1, "V1", nullptr);
+	//cb->connectToSingle(r, "CS1", nullptr);
+	//cb->connectToSingle(v2, "R1", nullptr);
+	//cb->connectToSingle(i, "V2", nullptr);
+	//cb->connectToSingle(r2, "I1", nullptr);
+	//Wire* wire = cb->getNewWire();
+	//cb->connectWireAndElement(wire, vs, vs->prev);
+	//cb->connectWireAndElement(wire, r2, r2->next);
 
-	CircuitSimplifier* cs = new CircuitSimplifier(cb);
-	cs->simplify();
-	SimplifiedCircuitInfoExtracter* scif = new SimplifiedCircuitInfoExtracter(cs->getSimplifiedCircuit());
-	NodeEquationMatrixFillerAndSolver* nfs = new NodeEquationMatrixFillerAndSolver(scif);
-	nfs->fillMatrix();
+	//CircuitSimplifier* cs = new CircuitSimplifier(cb);
+	//cs->simplify();
+	//SimplifiedCircuitInfoExtracter* scif = new SimplifiedCircuitInfoExtracter(cs->getSimplifiedCircuit());
+	//NodeEquationMatrixFillerAndSolver* nfs = new NodeEquationMatrixFillerAndSolver(scif);
+	//nfs->fillMatrix();
 
-	CircuitSolver* cSolver = new CircuitSolver(nfs->getNodalMatrixSolution(), nfs->getSimplifiedCircuit());
-	cSolver->printCircuitSolution();
+	//CircuitSolver* cSolver = new CircuitSolver(nfs->getNodalMatrixSolution(), nfs->getSimplifiedCircuit());
+	//cSolver->printCircuitSolution();
+
+	 cb->createNewCircuit();
 
 }
+
+

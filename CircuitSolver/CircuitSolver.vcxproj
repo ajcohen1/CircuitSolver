@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\Downloads\libfort-develop\libfort-develop\lib\fort.c" />
     <ClCompile Include="ActiveComponent.cpp" />
     <ClCompile Include="BoardComponent.cpp" />
     <ClCompile Include="Capacitor.cpp" />
@@ -110,10 +111,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\16623\Downloads\EIGEN\eigen-eigen-362e736a6e78</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\16623\Downloads\libfort-develop\libfort-develop\lib;C:\Users\16623\Downloads\EIGEN\eigen-eigen-362e736a6e78</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>C:\Users\16623\Downloads\libfort-develop\libfort-develop\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

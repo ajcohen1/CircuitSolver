@@ -7,5 +7,5 @@ Inductor::Inductor(std::string id, double magnitude, double multiplier) : Passiv
 }
 void Inductor::setImpedance(double frequency)
 {
-	impedance = sqrt(-1) * 2 * M_PI * magnitude * multiplier;
+	impedance = (0, 2 * M_PI * magnitude * multiplier);
 }

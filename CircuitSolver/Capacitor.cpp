@@ -8,5 +8,5 @@ Capacitor::Capacitor(std::string id, double magnitude, double multiplier) : Pass
 
 void Capacitor::setImpedance(double frequency)
 {
-	impedance = -1* sqrt(-1) / (2 * M_PI * frequency * multiplier * magnitude);
+	impedance = (0, -1 / (2 * M_PI * frequency * multiplier * magnitude));
 }

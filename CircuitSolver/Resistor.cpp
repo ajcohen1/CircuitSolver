@@ -6,5 +6,5 @@ Resistor::Resistor(std::string id, double magnitude, double multiplier) : Passiv
 
 void Resistor::setImpedance(double frequency)
 {
-	impedance = this->magnitude * this->multiplier;
+	impedance = (this->magnitude * this->multiplier, 0);
 }
