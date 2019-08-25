@@ -23,8 +23,11 @@ void NodeEquationMatrixFillerAndSolver::fillMatrix()
 	row++;
 	fillSuperNodeAndDeltaVoltageEqns(std::get<superNodes>(circuitInfo));
 	fillFreeNodeEqns(std::get<freeNodes>(circuitInfo), std::get<refNode>(circuitInfo));
-	fillCurrentSourceEqns(std::get<currentSources>(circuitInfo));
+//	fillCurrentSourceEqns(std::get<currentSources>(circuitInfo));
 	fillStandardNodeEqns(std::get<stdNodes>(circuitInfo));
+
+	//std::cout << nodeVoltageMatrix << "\n" << std::endl;
+	//std::cout << linearComboResultant << "\n" << std::endl;
 }
 
 std::unordered_map < std::string, double> NodeEquationMatrixFillerAndSolver::getNodalMatrixSolution()
@@ -45,7 +48,7 @@ std::unordered_map < std::string, double> NodeEquationMatrixFillerAndSolver::get
 
 		std::string nodeName = aNodeNameAndMatrixPosition.first;
 
-		std::cout << nodeName << " : " << nodeVoltage << std::endl;
+	//	std::cout << nodeName << " : " << nodeVoltage << std::endl;
 		
 		nodeMatrixSolution[nodeName] = nodeVoltage;
 	}
@@ -69,6 +72,8 @@ void NodeEquationMatrixFillerAndSolver::setupNodeVoltageMatrixAndLinComboResulta
 
 void NodeEquationMatrixFillerAndSolver::fillRefNodeEqn(Wire* refNode)
 {
+
+	this->refNode = refNode;
 
 	//fill linearComboResultant
 	const double refNodeVoltage = 0;
@@ -96,6 +101,7 @@ void NodeEquationMatrixFillerAndSolver::fillAllBranchEqns(Wire* primaryNode, std
 		Wire* secondaryNode = getSecondaryNode(primaryNode, aNonWireConnection);
 		fillSingleBranchEqn(primaryNode, aNonWireConnection, secondaryNode);
 	}
+
 }
 
 Wire* NodeEquationMatrixFillerAndSolver::getSecondaryNode(Wire* primaryNode, NonWire* adjacentElement)
@@ -126,7 +132,6 @@ void NodeEquationMatrixFillerAndSolver::transferBranchToAppropriateEqnMaker(std:
 	{
 		CurrentSource* currentSource = static_cast<CurrentSource*>(adjacentElememnt);
 		fillCurrentSourceBranchEqn(primaryNodeName, currentSource);
-	//	std::cout << nodeVoltageMatrix;
 	}
 	else return;
 }
@@ -146,9 +151,18 @@ void NodeEquationMatrixFillerAndSolver::fillCurrentSourceBranchEqn(std::string p
 	addCoefficientToNodeMatrix(primaryNodeName, coefficient);
 
 	//add currentSource val to linCombo vector
-	double currentCoefficient = getNonWireValue(currentSource);
-	linearComboResultant(row) += currentCoefficient;
+	double currentCoefficient = getNonWireValue(currentSource) * getCurrentSourceSign(primaryNodeName, currentSource->next->id);
+	linearComboResultant(row) += (-1) * currentCoefficient;
 }
+
+
+int NodeEquationMatrixFillerAndSolver::getCurrentSourceSign(std::string primaryNodeName, std::string currentSourceNextWireID)
+{
+	if (primaryNodeName.compare(currentSourceNextWireID) == 0)
+		return -1;
+	return 1;
+}
+
 
 double NodeEquationMatrixFillerAndSolver::getNonWireValue(NonWire* nonwire) {
 	return nonwire->magnitude* pow(10, nonwire->multiplier);
@@ -212,13 +226,13 @@ void NodeEquationMatrixFillerAndSolver::fillCurrentSourceEqns(std::vector<Curren
 	for (CurrentSource* aCurrentSource : allCurrentSources)
 	{
 		Wire* prevWire = aCurrentSource->prev;
-		if (freeNodeMap.count(prevWire->id) == 0) {
+		if (freeNodeMap.count(prevWire->id) == 0 && prevWire != refNode) {
 			fillAllBranchEqns(prevWire, "");
 			row++;
 		}
 
 		Wire* nextWire = aCurrentSource->next;
-		if (freeNodeMap.count(nextWire->id) == 0) {
+		if (freeNodeMap.count(nextWire->id) == 0 && nextWire != refNode) {
 			fillAllBranchEqns(nextWire, "");
 			row++;
 		}
@@ -250,6 +264,7 @@ VoltageSource* NodeEquationMatrixFillerAndSolver::getVoltageSourceConnectedToRef
 				VoltageSource* voltageSource = static_cast<VoltageSource*>(aConnection);
 				return voltageSource;
 			}
+			else return nullptr;
 	}
 }
 

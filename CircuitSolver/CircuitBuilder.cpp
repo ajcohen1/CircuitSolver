@@ -16,18 +16,6 @@ fort::table elementTable;
 double frequency = 0.00;
 unsigned long int wireCnt = 0;
 
-CircuitBuilder::CircuitBuilder(ActiveComponent* firstComp)
-{
-
-	//get the current type
-	currentType = currentTypes::AC;
-	if (firstComp->frequency == NULL)
-		currentType = currentTypes::DC;
-
-	//add newComp to locator and adjaceny graph
-	addNewCompToLocatorAndCircuitDraft(firstComp);
-
-}
 
 NonWire* CircuitBuilder::locate(std::string id)
 {
@@ -54,53 +42,6 @@ void CircuitBuilder::connectWireAndElement(Wire* wire, NonWire* element, Wire*& 
 
 	//connect element to wire...
 	connectionPort = wire;
-}
-
-void CircuitBuilder::connectToSingle(NonWire* newComp, std::string idOfConnectee, Wire* connectionPort)
-{
-	//get wire to be connected to, known as connectee
-	NonWire* connectee = locate(idOfConnectee);
-
-	Wire* wire;
-
-	//create the new wire
-	wire = connectionPort;
-	if (connectionPort == nullptr)
-	{
-		wire = getNewWire();
-
-		//add the wire to the conectee
-		connectWireAndElement(wire, connectee, connectionLocation::next);
-	}
-
-	//add the wire to the newComponent
-	connectWireAndElement(wire, newComp, connectionLocation::prev);
-
-	//add newComp to locator and adjaceny graph
-	addNewCompToLocatorAndCircuitDraft(newComp);
-
-}
-
-void CircuitBuilder::connectToAll(NonWire* newComp, std::vector<std::string> idOfAllConnectees)
-{
-	//create the new wire to be connected to all the connectees
-	Wire* wire = getNewWire();
-
-	//now connect the wire to all the connectees and the newComp
-	for (std::string connecteeName : idOfAllConnectees)
-	{
-		//get the individual connectee from the container of all conectees
-		NonWire* connectee = locate(connecteeName);
-
-		//now connect it to the wire
-		connectWireAndElement(wire, connectee, connectionLocation::next);
-	}
-	
-	//now connect the newComp to the wire connected to all the connectees
-	connectWireAndElement(wire, newComp, connectionLocation::prev);
-
-	//add newComp to locator and adjaceny graph
-	addNewCompToLocatorAndCircuitDraft(newComp);
 }
 
 void CircuitBuilder::addNewCompToLocatorAndCircuitDraft(NonWire* newComp)
@@ -209,20 +150,38 @@ void CircuitBuilder::createNewCircuit()
 	sendWelcomeMessageAndNewCircuitDisclaimer();
 	loadAllNonWire();
 	connectAllNonWire();
+	printCircuitInfoTable();
+
+	std::cout << "\nContinue to Next step to see its solution.\nThat is, the current and voltage going through each component.\n" << std::endl;
+	pressOneToContinue();
+}
+
+void CircuitBuilder::pressOneToContinue()
+{
+	std::cout << "\nPress 1 and ENTER to continue." << std::endl;
+
+	unsigned int continueNum = 0;
+
+	std::cin >> continueNum;
+
+	clearScreen();
+	if (continueNum == 1) return;
 }
 
 void CircuitBuilder::sendWelcomeMessageAndNewCircuitDisclaimer()
 {
-	std::string welcomeMessage = "Hello, you are using the CircuitSolver made by Abraham Cohen";
-	std::string newCircuitDisclaimer = "If you desire to load a past circuit, restart the programe and please use the \"loadPastCircuit(std::string pastCircuitFileName) method";
+	std::string welcomeMessage = "Hello, you are using the CircuitSolver made by Abraham Cohen.\n\n";
+	std::string newCircuitDisclaimer = "If you desire to load a past circuit, restart the programe and please use the \n\"loadPastCircuit(std::string pastCircuitFileName)\" method";
 
 	std::cout << welcomeMessage << std::endl;
 	std::cout << newCircuitDisclaimer << std::endl;
+
+	pressOneToContinue();
 }
 
 void CircuitBuilder::determineCircuitCurrentType()
 {
-	std::string chooseCurrentType = "\nThis version of the CircuitSolver can only support a single current type. \n";
+	std::string chooseCurrentType = "\nSelect current type of the circuit type of your first current/voltage source.\n";
 	std::cout << chooseCurrentType << std::endl;
 
 	int chosenCurrentType;
@@ -237,11 +196,13 @@ void CircuitBuilder::determineCircuitCurrentType()
 		currentType = currentTypes::AC;
 		determineFrequency();
 	}
+
+	clearScreen();
 }
 
 void CircuitBuilder::setUpElementIDAndValueTable()
 {
-	elementTable << fort::header << "ID" << "Value";
+	elementTable << fort::header << "Type" <<"ID" << "Value";
 
 	if (currentType == currentTypes::AC)
 		elementTable << "Impedance " << "Phase Shift";
@@ -258,7 +219,7 @@ void CircuitBuilder::determineFrequency()
 
 void CircuitBuilder::loadAllNonWire()
 {
-	std::string firstMessage = "You will be loading all the board components that your circuit may use. \nThe first componentn must be either a voltage source or a current source.";
+	std::string firstMessage = "You will be loading all the board components that your circuit may use. \n\nThe first component must be either a voltage source or a current source.";
 	std::cout << firstMessage << std::endl;
 
 	determineCircuitCurrentType();
@@ -268,6 +229,7 @@ void CircuitBuilder::loadAllNonWire()
 
 	while (addingNewComps)
 	{	
+		clearScreen();
 		loadSingleNonWire();
 		printAllLoadedElements();
 		if (allCompsAdded()) return;
@@ -301,6 +263,8 @@ void CircuitBuilder::loadSingleNonWire()
 	if (isActiveComp)
 		loadActiveComp(compType);
 	else loadPassiveComp(compType);
+
+	clearScreen();
 }
 
 int CircuitBuilder::getNewCompType()
@@ -317,6 +281,7 @@ int CircuitBuilder::getNewCompType()
 	std::cout << informUserOfOperation << numberForVoltageSource << numberForCurrentSource << numberForResistor << numberForInductor << numberForCapacitor << std::endl;
 	std::cin >> compType;
 
+	clearScreen();
 	return compType;
 
 }
@@ -341,19 +306,22 @@ void CircuitBuilder::loadPassiveComp(int compType)
 	{
 	case resistor:
 		passiveComp = new Resistor(std::get<id>(ID_Magnitude_andMultiplier), std::get<magitnude>(ID_Magnitude_andMultiplier), std::get<multiplier>(ID_Magnitude_andMultiplier));
+		elementTable << "Resistor";
 		break;
 	case capacitor:
 		passiveComp = new Capacitor(std::get<id>(ID_Magnitude_andMultiplier), std::get<magitnude>(ID_Magnitude_andMultiplier), std::get<multiplier>(ID_Magnitude_andMultiplier));
+		elementTable << "Capacitor";
 		break;
 	case inductor:	
 		passiveComp = new Inductor(std::get<id>(ID_Magnitude_andMultiplier), std::get<magitnude>(ID_Magnitude_andMultiplier), std::get<multiplier>(ID_Magnitude_andMultiplier));
+		elementTable << "Inductor";
 		break;
 	}
 
 	if(currentType == currentTypes::AC) 
 		passiveComp->setImpedance(frequency);
 
-	elementTable << std::get<id>(ID_Magnitude_andMultiplier) << std::get<magitnude>(ID_Magnitude_andMultiplier) * std::get<multiplier>(ID_Magnitude_andMultiplier) << fort::endr;
+	elementTable << std::get<id>(ID_Magnitude_andMultiplier) << std::get<magitnude>(ID_Magnitude_andMultiplier) * pow(10, std::get<multiplier>(ID_Magnitude_andMultiplier)) << fort::endr;
 	addNewCompToLocatorAndCircuitDraft(passiveComp);
 }
 
@@ -374,9 +342,15 @@ void CircuitBuilder::loadDCActiveComp(ActiveComponent* activeComp, int compType,
 {
 	bool isVoltageSource = compType == 0;
 
-	activeComp = new CurrentSource(id, magnitude, multiplier);
-	if (isVoltageSource)
-		activeComp = new VoltageSource(id, magnitude, multiplier);	
+	if (isVoltageSource) {
+		activeComp = new VoltageSource(id, magnitude, multiplier);
+		elementTable << "Voltage Source";
+	}
+	else
+	{
+		activeComp = new CurrentSource(id, magnitude, multiplier);
+		elementTable << "Current Source";
+	}
 
 	elementTable << id << magnitude * pow(10, multiplier) << fort::endr;
 	addNewCompToLocatorAndCircuitDraft(activeComp);
@@ -387,14 +361,62 @@ void CircuitBuilder::loadACActiveComp(ActiveComponent* activeComp, int compType,
 	double phasor = getPhasor();
 
 	bool isVoltageSource = compType == 0;
-	activeComp = new CurrentSource(id, magnitude, multiplier, frequency, phasor);
 
-	if (isVoltageSource)
+	if (isVoltageSource) {
 		activeComp = new VoltageSource(id, magnitude, multiplier, frequency, phasor);
+		elementTable << "Voltage Source";
+	}
+	else
+	{
+		activeComp = new CurrentSource(id, magnitude, multiplier, frequency, phasor);
+		elementTable << "CurrentSource";
+	}
+
 
 	elementTable << id << magnitude * pow(10, multiplier) << frequency << phasor << fort::endr;
 	addNewCompToLocatorAndCircuitDraft(activeComp);
 
+}
+
+void CircuitBuilder::mergeWires(Wire* primaryWire, Wire* wireToBeMerged)
+{
+	std::list<NonWire*>* primaryWireConnections = &(primaryWire->connections);
+	std::list<NonWire*> wireToBeMergedConnections = wireToBeMerged->connections;
+
+	transferWireConnectionsToPrimaryWire(primaryWire, wireToBeMerged);
+	connectSecondaryWireElementsToMergedWire(*primaryWireConnections, wireToBeMergedConnections);
+}
+
+void CircuitBuilder::transferWireConnectionsToPrimaryWire(Wire* primaryWire, Wire* wireToBeMerged)
+{
+	std::list<NonWire*> wireToBeMergedConnections = wireToBeMerged->connections;
+
+	for (NonWire* aConnection : wireToBeMergedConnections)
+	{
+		Wire** portToMergingWire = (aConnection->next == wireToBeMerged) ? &(aConnection->next) : &(aConnection->prev);
+
+		*portToMergingWire = primaryWire;
+	}
+}
+
+void CircuitBuilder::connectSecondaryWireElementsToMergedWire(std::list<NonWire*>& primaryWire, std::list<NonWire*> wireToBeMerged)
+{
+	std::list<NonWire*>::iterator mergingWireIterator = wireToBeMerged.begin();
+
+	for (auto mergingConnection = wireToBeMerged.begin(); mergingConnection != wireToBeMerged.end();)
+	{
+		bool connectionShared = std::find(primaryWire.begin(), primaryWire.end(), *mergingConnection) != primaryWire.end();
+
+		if (connectionShared)
+		{
+			++mergingConnection;
+		}
+		else
+		{
+			primaryWire.push_back(*mergingConnection);
+			mergingConnection = wireToBeMerged.erase(mergingConnection);
+		}
+	}
 }
 
 std::tuple<std::string, double, double> CircuitBuilder::getID_Magnitude_andMultiplier()
@@ -430,84 +452,199 @@ double CircuitBuilder::getPhasor()
 
 void CircuitBuilder::connectAllNonWire()
 {
-
-	std::cout << "\n\n\n\n---------------------STEP 2---------------------\n\n\n\n";
-
-	printAllLoadedElements();
 	printConnectionInstructions();
+	std::unordered_map <std::string, NonWire*> visitedElements;
 
-	for (NonWire* aNonWire : circuitDraft)
+	std::vector<NonWire*> nextElements;
+	nextElements.push_back(circuitDraft.front());
+
+	connectANonWireAndTheNext(nextElements, visitedElements);
+}
+
+void CircuitBuilder::connectANonWireAndTheNext(std::vector<NonWire*>& nextElements, std::unordered_map<std::string, NonWire*> visitedElements)
+{
+	std::vector<NonWire*> connectingElements;
+
+	if (visitedElements.size() == circuitDraft.size()) return;
+
+	for (NonWire* anElement : nextElements)
 	{
-		connectANonWire(aNonWire);
+		bool compVisited = visitedElements.count(anElement->id) > 0;
+		if (compVisited)
+			continue;
+		visitedElements[anElement->id] = anElement;
+
+		connectingElements = connectAndGetConnectingElements(anElement ->id);
 	}
 
-	std::cout << "\n FINISHED" << std::endl;
+	return connectANonWireAndTheNext(connectingElements, visitedElements);
+}
+
+std::vector<NonWire*> CircuitBuilder::connectAndGetConnectingElements(std::string currentElementID)
+{
+	int continueNum = 1;
+	bool stillConnectingElements = true;
+
+	std::vector<NonWire*> connectingElements;
+	std::string nextConnectedElementID;
+
+	while (stillConnectingElements)
+	{
+		printCircuitInfoTable();
+		printConnectionsAtNextConnectionPort(locate(currentElementID));
+		std::cout << "Type in the ID of a single element you would like to connect "
+			<< currentElementID << " to: "<< std::endl;
+
+		std::cin >> nextConnectedElementID;
+		
+		connectingElements.push_back(locate(nextConnectedElementID));
+		connectElementToConnectee(locate(currentElementID), locate(nextConnectedElementID));
+
+		std::cout << "Enter 1 to continue connecting elements to " << currentElementID << std::endl;
+		std::cout << "Enter 0 if finished\n" << std::endl;
+
+		std::cin >> continueNum;
+		stillConnectingElements = continueNum == 1;
+
+		clearScreen();
+	}
+
+	return connectingElements;
+}
+
+void CircuitBuilder::connectElementToConnectee(NonWire* currentElement, NonWire* nextConnectedElement)
+{
+	//four cases
+	if (currentElement->next == nullptr && nextConnectedElement->prev == nullptr) {
+		Wire* wire = getNewWire();
+		connectWireAndElement(wire, currentElement, connectionLocation::next);
+		connectWireAndElement(wire, nextConnectedElement, connectionLocation::prev);
+	}
+	else if (currentElement->next == nullptr)
+	{
+		Wire* wire = nextConnectedElement->prev;
+		connectWireAndElement(wire, currentElement, connectionLocation::next);
+	}
+	else if (nextConnectedElement->prev == nullptr)
+	{
+		Wire* wire = currentElement->next;
+		connectWireAndElement(wire, nextConnectedElement, connectionLocation::prev);
+	}
+	else
+	{
+		mergeWires(currentElement->next, nextConnectedElement->prev);
+	}
 
 }
 
+
 void CircuitBuilder::printAllLoadedElements()
 {
-	std::cout << "\n\n\n\n\nThese are all the available circuit elements you have loaded:" << std::endl;
+	std::cout << "These are all the available circuit elements you have loaded:" << std::endl;
 
 	std::cout << elementTable.to_string() << std::endl;
 }
 
 void CircuitBuilder::printConnectionInstructions()
 {
-	std::cout << "\nYou will now connect the elements of the circuit.\n" 
-		<< "\nEach element has a PREV and a NEXT connection. "
-		<< "\nAt PREV or NEXT, an element can have 1 to infinite connections.\n\n\n\n" << std::endl;
+
+	clearScreen();
+	std::cout << "\nYou will now connect the elements of the circuit." << std::endl;
+	pressOneToContinue();
+
+	std::cout << "Every component you have loaded has a PREV connection port and a NEXT connection port.\n\n\n" << 
+	"During the connection process, you will be connecting the NEXT connection port of a single item to the \nPREV connection port of a single or many items.\n\n\n" <<
+	"After this step, since every circuit is a loop, every component will have connections in its PREV and NEXT connection ports and the circuit will be properly constructed" << std::endl;
+
+	pressOneToContinue();
+
+	clearScreen();
 }
 
-void CircuitBuilder::connectANonWire(NonWire*& aNonWire)
+void CircuitBuilder::printConnectionsAtNextConnectionPort(NonWire* nonWire1)
 {
-	std::cout << "You will be connecting items to " << aNonWire->id << std::endl;
-	std::string compToBeConnectedID;
-
-	std::cout << "Enter ID of component you would like to connect to " << aNonWire->id << std::endl;
-	std::cin >> compToBeConnectedID;
-
-	NonWire* compToBeConnected = locate(compToBeConnectedID);
-
-	Wire* wire = getNewWire();
-
-	CircuitBuilder::connectionLocation connectionPortOfSecondaryCompOnPrimaryComp = getConnectionPort(aNonWire->id, compToBeConnectedID);
-	connectWireAndElement(wire, aNonWire, connectionPortOfSecondaryCompOnPrimaryComp);
-
-	CircuitBuilder::connectionLocation connectionPortOfPrimaryCompOnSecondaryComp = getConnectionPort(compToBeConnectedID, aNonWire->id);
-	connectWireAndElement(wire, compToBeConnected, connectionPortOfPrimaryCompOnSecondaryComp);
-}
-
-void CircuitBuilder::printElementPairConnections(NonWire* nonWire1, NonWire* nonWire2)
-{
-	std::cout << "\nCurrent Connections of " << nonWire1->id << " and " << nonWire2->id << std::endl;
+	std::cout << "\nCurrent Connections of " << nonWire1->id << " at NEXT" << std::endl;
 
 	fort::table elementConnectionTable;
-	elementConnectionTable << fort::header << "ID" << "Previous Connection Port" << "Next Connection Port" << fort::endr;
+	elementConnectionTable << fort::header << "ID" << "Next Connection Port" << fort::endr;
 
-	elementConnectionTable << nonWire1->id << getConnectionIDs(nonWire1, nonWire1->prev) << getConnectionIDs(nonWire1, nonWire1->next) << fort::endr;
-	elementConnectionTable << nonWire2->id << getConnectionIDs(nonWire2, nonWire2->prev) << getConnectionIDs(nonWire2, nonWire2->next) << fort::endr;
+	elementConnectionTable << nonWire1->id << getConnectionIDs(nonWire1, nonWire1->next) << fort::endr;
 	
 	std::cout << elementConnectionTable.to_string() << std::endl;
 }
 
-CircuitBuilder::connectionLocation CircuitBuilder::getConnectionPort(std::string primaryConnecteeID, std::string secondardConnecteeID)
+void CircuitBuilder::printCircuitInfoTable()
 {
-	printElementPairConnections(locate(secondardConnecteeID), locate(primaryConnecteeID));
+	clearScreen();
 
-	std::cout << "Which connection port on " << primaryConnecteeID << " would you like to connect " << secondardConnecteeID << " to?" << std::endl;
+	std::cout << "This is the current Circuit you have created. Restart the program if any errors have been detected." << std::endl;
 
-	std::cout << "Enter 1 to connect " << secondardConnecteeID << " to " << primaryConnecteeID << " NEXT connection port" << std::endl;
-	std::cout << "Enter 2 to connect " << secondardConnecteeID << " to " << primaryConnecteeID << " PREVIOUS connection port" << std::endl;
+	fort::table circuitInfoTable;
 
-	int connectionPortNum;
+	circuitInfoTable << fort::header << "Type" << "ID" << "Value" << "PREV Connections" << "NEXT Connections" << fort::endr;
 
-	std::cin >> connectionPortNum;
+	for (NonWire* aCircuitElement : circuitDraft)
+	{
+		circuitInfoTable <<
+			getElementType(aCircuitElement)
+			<< aCircuitElement->id
+			<< aCircuitElement->magnitude * pow(10, aCircuitElement->multiplier)
+			<< getConnectionIDs(aCircuitElement, aCircuitElement->prev)
+			<< getConnectionIDs(aCircuitElement, aCircuitElement->next)
+			<< fort::endr;
+	}
 
-	if (connectionPortNum == 1)
-		return CircuitBuilder::connectionLocation::next;
-	return CircuitBuilder::connectionLocation::prev;
+	std::cout << circuitInfoTable.to_string() << std::endl;
+}
+
+std::string CircuitBuilder::getElementType(NonWire* anElement)
+{
+	std::string type;
+	std::string unit = anElement->unit;
+
+	if (unit.compare("V") == 0) return "Voltage Source";
+	if (unit.compare("A") == 0) return "Current Source";
+	if (unit.compare("\u03A9") == 0) return "Resistor";
+	if (unit.compare("F") == 0) return "Capacitor";
+	if (unit.compare("H") == 0) return "Inductor";
+
+	return "ERROR";
 }
 
 
+void CircuitBuilder::clearScreen()
+{
+	HANDLE                     hStdOut;
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
+	DWORD                      count;
+	DWORD                      cellCount;
+	COORD                      homeCoords = { 0, 0 };
 
+	hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	if (hStdOut == INVALID_HANDLE_VALUE) return;
+
+	/* Get the number of cells in the current buffer */
+	if (!GetConsoleScreenBufferInfo(hStdOut, &csbi)) return;
+	cellCount = csbi.dwSize.X * csbi.dwSize.Y;
+
+	/* Fill the entire buffer with spaces */
+	if (!FillConsoleOutputCharacter(
+		hStdOut,
+		(TCHAR) ' ',
+		cellCount,
+		homeCoords,
+		&count
+	)) return;
+
+	/* Fill the entire buffer with the current colors and attributes */
+	if (!FillConsoleOutputAttribute(
+		hStdOut,
+		csbi.wAttributes,
+		cellCount,
+		homeCoords,
+		&count
+	)) return;
+
+	/* Move the cursor home */
+	SetConsoleCursorPosition(hStdOut, homeCoords);
+}

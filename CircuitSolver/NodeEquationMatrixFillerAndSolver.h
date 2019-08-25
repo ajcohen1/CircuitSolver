@@ -15,6 +15,7 @@ public:
 	Eigen::MatrixXd nodeVoltageMatrix;
 	Eigen::VectorXd nodeVoltageVec;
 	std::vector<NonWire*> getSimplifiedCircuit();
+	Wire* refNode = nullptr;
 
 private:
 	const unsigned int defualt_size = 1;
@@ -52,6 +53,7 @@ private:
 	VoltageSource* getVoltageSourceConnectedToRefNode(Wire* aFreeNode, Wire* refNode);
 	
 	void fillCurrentSourceEqns(std::vector<CurrentSource*> allCurrentSources);
+	int getCurrentSourceSign(std::string primaryNodeName, std::string currentSourceNextWireID);
 	void fillRefNodeEqn(Wire* refNode);
 	void fillStandardNodeEqns(std::vector<Wire*> allStandardNodes);
 

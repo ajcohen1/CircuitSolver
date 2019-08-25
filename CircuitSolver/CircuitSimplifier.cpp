@@ -144,46 +144,7 @@ void CircuitSimplifier::removeInductorAndMergeWires(NonWire* anInductor)
 	Wire* wireToBeMerged = anInductor->prev;
 
 	scb->remove(anInductor->id);
-
-	std::list<NonWire*>* primaryWireConnections = &(primaryWire->connections);
-	std::list<NonWire*> wireToBeMergedConnections = wireToBeMerged->connections;
-
-	transferWireConnections(primaryWire, wireToBeMerged);
-
-	mergeWireConnections(*primaryWireConnections, wireToBeMergedConnections);
-}
-
-void CircuitSimplifier::transferWireConnections(Wire* primaryWire, Wire* wireToBeMerged)
-{
-
-	std::list<NonWire*> wireToBeMergedConnections = wireToBeMerged->connections;
-
-	for (NonWire* aConnection : wireToBeMergedConnections)
-	{
-		Wire** portToMergingWire = (aConnection->next == wireToBeMerged) ? &(aConnection->next) : &(aConnection->prev);
-
-		*portToMergingWire = primaryWire;
-	}
-}
-
-void CircuitSimplifier::mergeWireConnections(std::list<NonWire*> &primaryWire, std::list<NonWire*> wireToBeMerged)
-{
-	std::list<NonWire*>::iterator mergingWireIterator = wireToBeMerged.begin();
-
-	for (auto mergingConnection = wireToBeMerged.begin(); mergingConnection != wireToBeMerged.end();)
-	{
-		bool connectionShared = std::find(primaryWire.begin(), primaryWire.end(), *mergingConnection) != primaryWire.end();
-
-		if (connectionShared)
-		{
-			++mergingConnection;
-		}
-		else
-		{
-			primaryWire.push_back(*mergingConnection);
-			mergingConnection = wireToBeMerged.erase(mergingConnection);
-		}
-	}
+	scb->mergeWires(primaryWire, wireToBeMerged);
 }
 
 ///////////////////////////////////////////////////

@@ -12,14 +12,18 @@ SimplifiedCircuitInfoExtracter::SimplifiedCircuitInfoExtracter(std::vector<NonWi
 
 std::tuple<unsigned int, Wire*, std::vector<VoltageSource*>, std::vector<CurrentSource*>, std::vector<Wire*>, std::vector<Wire*>> SimplifiedCircuitInfoExtracter::extract()
 {
+	//test
+	std::vector<CurrentSource*> testVec;
+
+
 	findRefNode();
 	auto superNodes = findSuperNodes();
-	auto currentSources = findCurrentSources();
+	//auto currentSources = findCurrentSources();
 	auto freeNodes = findFreeNodes();
 	auto stdNodes = findStandaradNodes();
 	unsigned int wireCnt = findWireCount();
 
-	auto simplifiedCircuitInfo = std::make_tuple(wireCnt, refNode, superNodes, currentSources, freeNodes, stdNodes);
+	auto simplifiedCircuitInfo = std::make_tuple(wireCnt, refNode, superNodes, testVec, freeNodes, stdNodes);
 	return simplifiedCircuitInfo;
 }
 

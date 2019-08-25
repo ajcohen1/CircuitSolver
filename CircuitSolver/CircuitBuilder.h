@@ -9,6 +9,7 @@
 #include "Resistor.h"
 #include "Inductor.h"
 #include "Capacitor.h"
+#include <Windows.h>
 #include <fort.hpp>
 
 class CircuitBuilder
@@ -21,9 +22,6 @@ public:
 	std::unordered_map<std::string, NonWire*> nonWireMap;
 	unsigned long int wireCnt = 0;
 
-	CircuitBuilder(ActiveComponent* firstComp);
-	void connectToSingle(NonWire* newComp, std::string idOfConnectee, Wire* connectionPort);
-	void connectToAll(NonWire* newComp, std::vector<std::string> idOfAllConnectees);
 	std::vector<NonWire*> getCircuit();
 	void printCircuit();
 	void remove(std::string idOfCompToBeRemoved);
@@ -53,23 +51,31 @@ public:
 	void loadDCActiveComp(ActiveComponent* activeComp, int compType, std::string id, double magnitude, double multipler);
 	void loadACActiveComp(ActiveComponent* activeComp, int compType, std::string id, double magnitude, double multipler);
 
+	void mergeWires(Wire* primaryWire, Wire* wireToBeMerged);
+	void transferWireConnectionsToPrimaryWire(Wire* primaryWire, Wire* wireToBeMerged);
+	void connectSecondaryWireElementsToMergedWire(std::list<NonWire*>& primaryWire, std::list<NonWire*> wireToBeMerged);
 
 
 	std::tuple<std::string, double, double> getID_Magnitude_andMultiplier();
 	double getPhasor();
 
 	void connectAllNonWire();
+	void connectANonWireAndTheNext(std::vector<NonWire*>& nextElements, std::unordered_map<std::string, NonWire*> visitedElements);
+	std::vector<NonWire*> connectAndGetConnectingElements(std::string connecteeElementID);
+	void connectElementToConnectee(NonWire* connectingElements, NonWire* elementToConnectTo);
+
 	void printAllLoadedElements();
 	void printConnectionInstructions();
-	void connectANonWire(NonWire* &aNonWire);
-
-	void printElementPairConnections(NonWire* nonWire1, NonWire* nonWire2);
-	connectionLocation getConnectionPort(std::string primaryConnecteeID, std::string secondardConnecteeID);
+	void printConnectionsAtNextConnectionPort(NonWire* nonWire1);
 
 private:
+	std::string getElementType(NonWire* anElement);
+	void printCircuitInfoTable();
 	void removeExternalConnections(Wire** wire, NonWire* compToBeRemoved);
 	std::string getConnectionIDs(NonWire* element, Wire* adjacentWire);
 	void connectWireAndElement(Wire* wire, NonWire* element, connectionLocation cl);
 	NonWire* locate(std::string id);
+	void pressOneToContinue();
+	void clearScreen();
 };
 
